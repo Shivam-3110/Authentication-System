@@ -1,12 +1,13 @@
 import express from "express";
 import userModel from "../models/user.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 const router = express.Router()
 router.post('/register',async(req,res)=>{
     const{username,email,password,role} = req.body;
-
+     const hassedPassword = await bcrypt.hash(password,10);
     const user = await userModel.create({
-        username,email,password,role
+        username,email,password:hassedPassword,role
     })
     const token = jwt.sign({
         id:user._id,
@@ -29,7 +30,7 @@ router.post('/login',async(req,res)=>{
             message:"user account not found"
         })
     }
-    const isPasswordValid = password ===isUserExists.password
+    const isPasswordValid = await bcrypt.compare(password,isUserExists.password);
 
     if(!isPasswordValid){
         return res.status(401).json({
