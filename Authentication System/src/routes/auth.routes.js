@@ -29,14 +29,18 @@ router.post('/login',async(req,res)=>{
             message:"user account not found"
         })
     }
-    const isPasswordValid = password ==isUserExists.password
+    const isPasswordValid = password ===isUserExists.password
 
     if(!isPasswordValid){
         return res.status(401).json({
             message:"Invalid password"
         })
     }
+    const token = jwt.sign({id:isUserExists._id},process.env.JWT_SECRET);
 
+    res.cookie("token",token,{
+        expires:new Date(Date.now()+ 1000*60*60*24*7),
+    })
     res.status(200).json({
         message:"user loggedIn Successfully"
     });
@@ -67,13 +71,12 @@ router.get('/users',async(req,res)=>{
         })
     }
 })
-
-
-
-
-
-
-
+router.get('/logout',(req,res)=>{
+    res.clearCookie('token')
+    res.status(200).json({
+        message:"user logged out successfully"
+    })
+})
 
 
 export default router ;
