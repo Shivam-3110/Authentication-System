@@ -7,16 +7,38 @@ import jwt from 'jsonwebtoken';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import AuthRoutes from "./routes/auth.routes.js";
 import cookieparser from "cookie-parser";
+import User from './models/user.js';
 const app = express();
 app.use(passport.initialize());
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback',
-}, (accessToken, refreshToken, profile, done) => {
+}, async (accessToken, refreshToken, profile, done) => {
   // Here, you would typically find or create a user in your database
+   try {
+  const googleId = profile.id;
+        const name = profile.displayName;
+        const email = profile.emails[0].value;
+      
+        let user = await User.findOne({ googleId });
+
+        // If not exists → CREATE user
+        if (!user) {
+          const username = email.split('@')[0];
+          user = await User.create({
+            googleId,
+            username,
+            name,
+            email,
+          
+          });
+        }
   // For this example, we'll just return the profile
-  return done(null, profile);
+   return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
 }));
 app.use(express.json());
 app.use(cookieparser());
