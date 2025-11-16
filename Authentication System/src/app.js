@@ -8,6 +8,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import AuthRoutes from "./routes/auth.routes.js";
 import cookieparser from "cookie-parser";
 import User from './models/user.js';
+import transporter  from './email.js';
 const app = express();
 app.use(passport.initialize());
 passport.use(new GoogleStrategy({

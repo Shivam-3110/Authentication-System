@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema({
         type:String,
         
     },
+      resetPasswordToken: String,
+    resetPasswordExpires: Date,
     role : {
         type:String,
         default:"user",
@@ -32,8 +34,10 @@ const userSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    
 },
     {timestamps:true},
+    
 );
 userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
 const userModel = mongoose.model("User",userSchema);
