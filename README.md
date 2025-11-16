@@ -1,12 +1,15 @@
-A production-ready authentication and authorization backend built using Node.js, Express, and MongoDB, featuring JWT-based access control, password hashing, and role-based permissions.
+🔐 Production-Ready Authentication & Authorization Backend
+
+Node.js + Express + MongoDB + JWT + RBAC + Nodemailer
+
+A complete authentication and authorization backend built using Node.js, Express, and MongoDB, featuring JWT-based access control, role-based permissions, secure password hashing, and a full forgot/reset password workflow using email verification links.
 
 🚀 Features
-
 ✅ User Authentication
 
 Register new users (username, email, password, role)
 
-Login with JWT token generation
+Login with JWT access token
 
 Logout functionality
 
@@ -16,32 +19,57 @@ Secure password hashing using bcrypt
 
 Role-based access control (Admin/User)
 
-Protected routes using JWT middleware
+Protected routes using JWT verification middleware
 
 ✅ Security
 
-Passwords hashed using bcrypt before saving
+Passwords hashed before saving
 
-JWT access tokens stored securely
+JWT tokens securely signed & verified
 
-Environment variables managed via dotenv
+Environment variables managed with dotenv
 
-✅ API Endpoints
+📨 Forgot & Reset Password (Newly Added)
 
-POST /api/auth/register → Register new user
+Users can request a Password Reset Email
 
-POST /api/auth/login → Login user
+Email sent using Nodemailer + Gmail/SMTP
 
-GET /api/user → Get user data (Protected)
+Contains a secure one-time token link
 
-POST /api/auth/logout → Logout user
+Token generated using crypto & stored temporarily in DB
 
-✅ Bonus Features
+User can set a new password via /reset-password API
+
+Token auto-expires for security
+
+📡 API Endpoints
+🔐 Authentication
+Method	Endpoint	Description
+POST	/api/auth/register	Register a new user
+POST	/api/auth/login	Login & receive JWT
+POST	/api/auth/logout	Logout user
+👤 User Routes
+Method	Endpoint	Description
+GET	/api/user	Get user data (Protected)
+🛠️ Password Reset (New)
+Method	Endpoint	Description
+POST	/api/auth/forgot-password	Sends password reset email
+POST	/api/auth/reset-password/:token	Resets the password using secure token link
+🎁 Bonus Features
 
 Token verification middleware
 
 MongoDB connection handling
 
-Clean project structure with modular code
+Clean & modular project structure
 
-Ready for Google OAuth, Refresh Tokens, and Email Verification integration
+Ready for:
+
+Google OAuth
+
+Refresh Tokens
+
+Email Verification
+
+Multi-factor Authentication
